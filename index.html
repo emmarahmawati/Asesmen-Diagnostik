@@ -348,7 +348,7 @@ const STORE_KEY = 'responses';
 // Isi dengan URL Web App Apps Script kamu (diakhiri /exec) supaya data
 // tersimpan bersama di Google Sheet dan bisa diakses dari perangkat mana pun.
 // Kosongkan ('') kalau aplikasi ini dijalankan di dalam Claude.
-const SHEET_WEBAPP_URL = ''; // contoh: 'https://script.google.com/macros/s/AKfycb.../exec'
+const SHEET_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwwL5IEmkpyMjM0GWhnm0S1qpGrN0SQX6rJurbWpdouHL2tP3oiMdqjZBLIpqZA68Ij/exec'; 
 
 const HAS_CLOUD_STORAGE = typeof window.storage !== 'undefined';
 const STORAGE_MODE = SHEET_WEBAPP_URL ? 'sheet' : (HAS_CLOUD_STORAGE ? 'cloud' : 'local');
