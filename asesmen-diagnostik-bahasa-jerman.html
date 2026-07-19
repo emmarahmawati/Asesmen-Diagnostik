@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fragebogen — Asesmen Diagnostik Bahasa Jerman</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root{
+  --shell:#1E1B17;
+  --shell-2:#262220;
+  --paper:#FBF8F1;
+  --paper-dim:#F1ECDD;
+  --ink:#221F1B;
+  --muted:#847E70;
+  --line:rgba(34,31,27,0.14);
+  --gold:#C79A3D;
+  --gold-deep:#9C7526;
+  --brick:#9C3D34;
+  --teal:#2B5D5A;
+  --ok:#3E6B4F;
+  --radius:4px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--shell);
+  color:var(--ink);
+  font-family:'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  min-height:100vh;
+}
+h1,h2,h3,.disp{
+  font-family:'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  letter-spacing:-0.01em;
+}
+.mono{font-family:'IBM Plex Mono', ui-monospace, monospace;}
+button{font-family:inherit;cursor:pointer;}
+:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+@media (prefers-reduced-motion: reduce){
+  *{animation:none !important; transition:none !important;}
+}
+
+/* ===== Shell / top bar ===== */
+.topbar{
+  position:sticky; top:0; z-index:50;
+  background:var(--shell);
+  border-bottom:1px solid rgba(255,255,255,0.08);
+  padding:14px 20px;
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  flex-wrap:wrap;
+}
+.brand{display:flex; align-items:center; gap:10px; color:#EFE9DA;}
+.brand .stamp{
+  width:34px;height:34px;border-radius:50%;
+  border:1.5px solid var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--gold); font-weight:700; font-size:13px; font-family:'IBM Plex Mono',monospace;
+  flex-shrink:0;
+}
+.brand-text .k1{font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:#B8AF9A; margin:0;}
+.brand-text h1{font-size:17px; margin:0; color:#F6F1E4; font-weight:600;}
+.modebar{display:flex; gap:2px; background:rgba(255,255,255,0.06); padding:3px; border-radius:8px;}
+.modebar button{
+  border:none; background:transparent; color:#C9C1AE; font-size:13px; font-weight:500;
+  padding:8px 14px; border-radius:6px; transition:all .15s ease;
+}
+.modebar button.active{background:var(--paper); color:var(--ink);}
+
+/* ===== Layout ===== */
+.wrap{max-width:1180px; margin:0 auto; padding:28px 20px 90px;}
+.layout{display:grid; grid-template-columns:220px 1fr; gap:24px; align-items:start;}
+@media (max-width:860px){ .layout{grid-template-columns:1fr;} .tabs-rail{display:none;} }
+
+/* ===== Section rail (file-tab nav) ===== */
+.tabs-rail{position:sticky; top:78px; display:flex; flex-direction:column; gap:6px;}
+.tab-item{
+  display:flex; align-items:center; gap:10px;
+  background:var(--shell-2); border:1px solid rgba(255,255,255,0.07);
+  border-left:3px solid transparent;
+  color:#CFC7B4; padding:10px 12px; border-radius:3px;
+  font-size:12.5px; text-align:left; transition:all .15s ease;
+}
+.tab-item .let{
+  font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:15px;
+  color:var(--gold); width:20px;
+}
+.tab-item.on{background:var(--paper); color:var(--ink); border-left-color:var(--brick);}
+.tab-item.on .let{color:var(--brick);}
+.tab-item .done{margin-left:auto; color:var(--ok); font-size:11px;}
+
+/* ===== Cards (paper) ===== */
+.card{
+  background:var(--paper);
+  border-radius:var(--radius);
+  box-shadow:0 1px 0 rgba(255,255,255,0.6) inset, 0 18px 40px -20px rgba(0,0,0,0.55);
+  position:relative;
+  overflow:hidden;
+}
+.card + .card{margin-top:20px;}
+.section-card{padding:26px 26px 30px;}
+.section-head{display:flex; align-items:baseline; gap:14px; margin-bottom:22px; border-bottom:1px solid var(--line); padding-bottom:14px;}
+.section-head .glyph{
+  font-family:'Space Grotesk',sans-serif; font-size:44px; font-weight:700;
+  color:var(--paper-dim); -webkit-text-stroke:1.5px var(--line); line-height:1;
+}
+.section-head .txt .eyebrow{font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:var(--brick); font-weight:600; margin:0 0 2px;}
+.section-head .txt h2{font-size:20px; margin:0; color:var(--ink);}
+
+.q{margin-bottom:24px;}
+.q:last-child{margin-bottom:0;}
+.q-num{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:22px;height:22px; border-radius:50%; background:var(--ink); color:var(--paper);
+  font-family:'IBM Plex Mono',monospace; font-size:11px; margin-right:8px; flex-shrink:0;
+}
+.q-prompt{font-size:14.5px; line-height:1.5; color:var(--ink); font-weight:500; display:flex; gap:2px;}
+.q-body{margin-top:10px; margin-left:30px;}
+
+input[type=text], textarea, select{
+  width:100%; border:1px solid var(--line); background:#fff; border-radius:3px;
+  padding:9px 11px; font-family:inherit; font-size:13.5px; color:var(--ink); resize:vertical;
+}
+textarea{min-height:64px; line-height:1.5;}
+input[type=text]:focus, textarea:focus, select:focus{border-color:var(--gold);}
+.multitext{display:flex; flex-direction:column; gap:8px;}
+.multitext input{max-width:420px;}
+
+.opt-list{display:flex; flex-direction:column; gap:7px;}
+.opt-list label{
+  display:flex; align-items:center; gap:9px; font-size:13.5px; color:var(--ink);
+  background:#fff; border:1px solid var(--line); border-radius:3px; padding:8px 11px; cursor:pointer;
+  transition:border-color .12s ease, background .12s ease;
+}
+.opt-list label:hover{border-color:var(--gold);}
+.opt-list input{accent-color:var(--brick); flex-shrink:0;}
+.reason-field{margin-top:10px;}
+.reason-field label.rlabel{font-size:12px; color:var(--muted); display:block; margin-bottom:4px;}
+
+/* Likert table */
+.likert-table{width:100%; border-collapse:collapse; font-size:13px;}
+.likert-table th{
+  font-family:'IBM Plex Mono',monospace; font-weight:500; font-size:11px; color:var(--muted);
+  padding:6px 4px; text-align:center;
+}
+.likert-table td{padding:10px 4px; border-top:1px solid var(--line); vertical-align:middle;}
+.likert-table td.stmt{text-align:left; padding-right:14px; color:var(--ink); font-size:13px;}
+.likert-table td.pick{text-align:center;}
+.likert-table input{accent-color:var(--brick);}
+.likert-legend{display:flex; justify-content:space-between; font-size:10.5px; color:var(--muted); margin-top:6px; padding:0 4px; font-family:'IBM Plex Mono',monospace;}
+
+/* Ranking */
+.rank-list{display:flex; flex-direction:column; gap:6px; max-width:460px;}
+.rank-row{
+  display:flex; align-items:center; gap:10px; background:#fff; border:1px solid var(--line);
+  border-radius:3px; padding:8px 10px; cursor:grab; user-select:none;
+}
+.rank-row.dragging{opacity:0.4;}
+.rank-row .grip{color:var(--muted); font-size:14px; letter-spacing:1px;}
+.rank-row .rnum{
+  font-family:'IBM Plex Mono',monospace; font-weight:500; color:var(--brick); width:18px; flex-shrink:0;
+}
+.rank-hint{font-size:11.5px; color:var(--muted); margin-top:6px;}
+
+/* meta form (name/class) */
+.meta-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:14px;}
+@media (max-width:600px){.meta-grid{grid-template-columns:1fr;}}
+.meta-grid label{font-size:11.5px; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; display:block; margin-bottom:5px;}
+
+/* Progress + submit bar */
+.progressbar{
+  position:sticky; bottom:0; z-index:40; background:var(--shell); border-top:1px solid rgba(255,255,255,0.08);
+  padding:12px 20px; display:flex; align-items:center; gap:16px; justify-content:center; flex-wrap:wrap;
+}
+.progressbar .track{flex:1; max-width:380px; height:6px; background:rgba(255,255,255,0.12); border-radius:4px; overflow:hidden;}
+.progressbar .fill{height:100%; background:linear-gradient(90deg,var(--gold),var(--brick)); transition:width .2s ease;}
+.progressbar .lbl{font-family:'IBM Plex Mono',monospace; font-size:12px; color:#E7DFC9;}
+.btn{
+  border:none; border-radius:3px; padding:10px 20px; font-size:13.5px; font-weight:600;
+  background:var(--brick); color:#fff; transition:transform .1s ease, background .15s ease;
+}
+.btn:hover{background:#823329;}
+.btn:active{transform:scale(0.98);}
+.btn.secondary{background:transparent; border:1px solid rgba(255,255,255,0.25); color:#EFE9DA;}
+.btn.secondary:hover{background:rgba(255,255,255,0.08);}
+.btn.ghost{background:transparent; color:var(--brick); border:1px solid var(--brick); padding:6px 12px; font-size:12.5px;}
+.btn.ghost:hover{background:rgba(156,61,52,0.08);}
+
+/* Done screen */
+.done-screen{text-align:center; padding:70px 20px; color:#EFE9DA;}
+.done-screen .stamp-big{
+  width:84px;height:84px;border-radius:50%; border:2px solid var(--gold); margin:0 auto 20px;
+  display:flex; align-items:center; justify-content:center; color:var(--gold); font-size:34px; font-family:'Space Grotesk',sans-serif;
+}
+.done-screen h2{color:#F6F1E4;}
+.done-screen p{color:#B8AF9A; max-width:440px; margin:8px auto 0; font-size:14px; line-height:1.6;}
+
+/* ===== Dashboard ===== */
+.dash-top{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:20px;}
+.dash-top .info{color:#CFC7B4; font-size:12.5px;}
+.stat-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:20px;}
+@media (max-width:760px){.stat-grid{grid-template-columns:repeat(2,1fr);}}
+.stat-card{background:var(--paper); border-radius:var(--radius); padding:18px 18px 16px; box-shadow:0 12px 30px -18px rgba(0,0,0,0.5);}
+.stat-card .k{font-size:11px; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin:0 0 6px;}
+.stat-card .v{font-family:'Space Grotesk',sans-serif; font-size:28px; font-weight:700; color:var(--ink); margin:0;}
+.stat-card .v small{font-size:13px; color:var(--muted); font-weight:500;}
+
+.chart-block{margin-bottom:22px;}
+.chart-block:last-child{margin-bottom:0;}
+.chart-title{font-size:13.5px; font-weight:600; color:var(--ink); margin:0 0 4px;}
+.chart-sub{font-size:11.5px; color:var(--muted); margin:0 0 10px;}
+.bar-row{display:grid; grid-template-columns:150px 1fr 46px; align-items:center; gap:10px; margin-bottom:6px; font-size:12.5px;}
+.bar-row .lab{color:var(--ink); text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.bar-track{background:var(--paper-dim); border-radius:3px; height:16px; overflow:hidden;}
+.bar-fill{height:100%; border-radius:3px 0 0 3px;}
+.bar-row .cnt{font-family:'IBM Plex Mono',monospace; color:var(--muted); font-size:11.5px;}
+
+.tab-strip{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:16px;}
+.tab-strip button{
+  border:1px solid var(--line); background:var(--paper); color:var(--muted); font-size:12px;
+  padding:6px 12px; border-radius:20px; font-weight:500;
+}
+.tab-strip button.on{background:var(--ink); color:var(--paper); border-color:var(--ink);}
+
+.student-list{display:flex; flex-direction:column; gap:6px;}
+.student-row{
+  display:flex; align-items:center; gap:10px; background:#fff; border:1px solid var(--line);
+  border-radius:3px; padding:9px 12px; font-size:13px;
+}
+.student-row .nm{font-weight:600; color:var(--ink);}
+.student-row .cl{color:var(--muted); font-size:11.5px;}
+.student-row button{margin-left:auto;}
+
+.open-answer{border-top:1px solid var(--line); padding:10px 0; font-size:13px;}
+.open-answer:first-child{border-top:none;}
+.open-answer .who{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--brick); margin-bottom:3px;}
+.open-answer .txt{color:var(--ink); line-height:1.5;}
+
+.empty-state{text-align:center; padding:50px 20px; color:var(--muted);}
+.empty-state .big{font-family:'Space Grotesk',sans-serif; font-size:20px; color:var(--ink); margin-bottom:6px;}
+
+/* modal */
+.modal-bg{position:fixed; inset:0; background:rgba(20,18,15,0.7); z-index:100; display:flex; align-items:flex-start; justify-content:center; padding:40px 16px; overflow-y:auto;}
+.modal{background:var(--paper); border-radius:6px; max-width:640px; width:100%; padding:26px; position:relative;}
+.modal .x{position:absolute; top:14px; right:16px; background:none; border:none; font-size:20px; color:var(--muted);}
+.modal h3{margin-top:0;}
+.modal .grp{margin-bottom:16px;}
+.modal .grp h4{font-size:11px; text-transform:uppercase; letter-spacing:0.1em; color:var(--brick); margin:0 0 8px; border-bottom:1px solid var(--line); padding-bottom:5px;}
+.modal .row{font-size:13px; margin-bottom:8px; line-height:1.5;}
+.modal .row b{display:block; color:var(--muted); font-weight:500; font-size:11.5px; margin-bottom:2px;}
+
+.toast{position:fixed; bottom:80px; left:50%; transform:translateX(-50%); background:var(--ink); color:var(--paper); padding:10px 18px; border-radius:4px; font-size:13px; z-index:200; box-shadow:0 10px 30px rgba(0,0,0,0.4);}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* ============================================================
+   DATA MODEL / CONFIG
+   ============================================================ */
+const LIKERT_ITEMS = [
+  {t:"Saya ingin memahami pelajaran, bukan sekadar memperoleh nilai.", rev:false},
+  {t:"Saya tetap berusaha walaupun tugas terasa sulit.", rev:false},
+  {t:"Saya senang mempelajari hal baru.", rev:false},
+  {t:"Saya mudah menyerah ketika mengalami kesulitan.", rev:true},
+  {t:"Saya ingin berkembang setiap hari.", rev:false},
+  {t:"Saya berani mencoba meskipun belum yakin berhasil.", rev:false},
+  {t:"Saya menunda tugas sampai batas waktu terakhir.", rev:true},
+  {t:"Saya merasa bertanggung jawab terhadap hasil belajar saya sendiri.", rev:false},
+];
+const RANK_ITEMS = ["Menonton video","Bermain game edukasi","Diskusi","Praktik","Presentasi","Membaca","Proyek","Mendengarkan penjelasan guru"];
+
+const SECTIONS = [
+{key:'A', title:'Mengenal Dirimu', fields:[
+  {id:'q1', type:'multitext', n:3, num:1, prompt:'Jika temanmu diminta mendeskripsikan dirimu dalam tiga kata, menurutmu mereka akan mengatakan...', ph:['Kata 1','Kata 2','Kata 3']},
+  {id:'q2', type:'textarea', num:2, prompt:'Hal apa yang paling membuatmu merasa bangga terhadap dirimu? Mengapa?'},
+  {id:'q3', type:'textarea', num:3, prompt:'Ceritakan pengalaman belajar yang paling menyenangkan yang pernah kamu alami. Apa yang membuat pengalaman tersebut menyenangkan?'},
+  {id:'q4', type:'textarea', num:4, prompt:'Ceritakan pengalaman belajar yang paling tidak menyenangkan. Menurutmu apa penyebabnya?'},
+  {id:'q5', type:'textarea', num:5, prompt:'Jika kamu bebas memilih guru ideal, guru seperti apa yang ingin mengajarmu? Mengapa?'},
+]},
+{key:'B', title:'Cara Kamu Belajar', fields:[
+  {id:'q6', type:'radio', num:6, prompt:'Guru menjelaskan materi selama 20 menit. Pada menit ke-20 biasanya kamu...', options:['Masih fokus','Mulai kehilangan fokus','Baru mulai memahami','Menunggu contoh','Menunggu diskusi'], reason:true},
+  {id:'q7', type:'checkbox', num:7, prompt:'Ketika menemukan materi yang sulit, apa yang pertama kali kamu lakukan?', options:['Mencoba sendiri','Mencari video','Mencari di internet','Bertanya guru','Bertanya teman','Menunggu dijelaskan'], reason:true},
+  {id:'q8', type:'textarea', num:8, prompt:'Jika besok ada ulangan mendadak, bagaimana biasanya kamu mempersiapkan diri?'},
+  {id:'q9', type:'textarea', num:9, prompt:'Ketika harus menghafal sesuatu, cara apa yang paling sering kamu gunakan?'},
+  {id:'q10', type:'textarea', num:10, prompt:'Bagaimana kamu mengetahui bahwa kamu benar-benar sudah memahami suatu materi?'},
+]},
+{key:'C', title:'Ketika Mengalami Kesulitan', fields:[
+  {id:'q11', type:'textarea', num:11, prompt:'Kamu mengerjakan soal selama 20 menit tetapi tetap tidak menemukan jawabannya. Apa yang akan kamu lakukan?'},
+  {id:'q12', type:'textarea', num:12, prompt:'Kamu mendapatkan nilai jauh di bawah harapanmu. Apa yang pertama kali kamu lakukan?'},
+  {id:'q13a', type:'textarea', num:13, prompt:'Guru mengembalikan tugasmu dengan banyak koreksi — apa yang kamu rasakan?'},
+  {id:'q13b', type:'textarea', num:'13b', prompt:'Apa yang akan kamu lakukan setelah itu?', noNum:true},
+  {id:'q14', type:'radio', num:14, prompt:'Menurutmu, kesalahan ketika belajar adalah...', options:['Sesuatu yang harus dihindari','Bagian dari proses belajar','Tanda saya kurang pintar','Tergantung situasinya'], reason:true},
+  {id:'q15', type:'textarea', num:15, prompt:'Kapan terakhir kali kamu menyerah terhadap suatu tugas? Mengapa? Apa yang terjadi setelah itu?'},
+]},
+{key:'D', title:'Kerja Sama', fields:[
+  {id:'q16', type:'radio', num:16, prompt:'Ketika bekerja kelompok biasanya kamu menjadi...', options:['Pemimpin','Pemberi ide','Pencatat','Pelaksana','Pendengar','Mengikuti teman'], reason:true},
+  {id:'q17', type:'textarea', num:17, prompt:'Jika anggota kelompokmu tidak mengerjakan tugasnya, apa yang akan kamu lakukan?'},
+  {id:'q18', type:'textarea', num:18, prompt:'Jika pendapatmu berbeda dengan teman, apa yang biasanya kamu lakukan?'},
+  {id:'q19', type:'textarea', num:19, prompt:'Temanmu terlihat kesulitan memahami materi. Apa yang akan kamu lakukan?'},
+  {id:'q20', type:'textarea', num:20, prompt:'Menurutmu, kelompok yang baik seperti apa?'},
+]},
+{key:'E', title:'Motivasi', fields:[
+  {id:'likert', type:'likert', num:'21-28'}
+]},
+{key:'F', title:'Preferensi Pembelajaran', fields:[
+  {id:'q21', type:'ranking', num:21, prompt:'Bayangkan guru akan mengajarkan materi baru. Urutkan aktivitas berikut dari yang PALING kamu sukai sampai yang PALING TIDAK kamu sukai. (Seret untuk mengurutkan)'},
+  {id:'q22', type:'textarea', num:22, prompt:'Jika hanya boleh memilih SATU aktivitas selama satu semester, apa yang kamu pilih? Mengapa?'},
+  {id:'q23', type:'radio', num:23, prompt:'Saat belajar, kamu lebih nyaman...', options:['Sendiri','Berpasangan','Kelompok kecil','Kelompok besar'], reason:true},
+  {id:'q24', type:'textarea', num:24, prompt:'Apa yang membuatmu cepat bosan ketika belajar?'},
+  {id:'q25', type:'textarea', num:25, prompt:'Apa yang membuatmu lupa waktu ketika belajar?'},
+]},
+{key:'G', title:'Kreativitas dan Berpikir', fields:[
+  {id:'q26', type:'textarea', num:26, prompt:'Guru memberikan tugas yang boleh dikerjakan dengan cara apa pun. Apa yang pertama kali kamu pikirkan?'},
+  {id:'q27', type:'radio', num:27, prompt:'Ketika memiliki dua cara menyelesaikan tugas, mana yang kamu pilih?', options:['Cara yang paling aman','Cara yang lebih kreatif'], reason:true},
+  {id:'q28', type:'textarea', num:28, prompt:'Menurutmu, orang yang kreatif itu seperti apa?'},
+  {id:'q29', type:'textarea', num:29, prompt:'Apa ide paling kreatif yang pernah kamu lakukan di sekolah?'},
+  {id:'q30', type:'textarea', num:30, prompt:'Jika diberi kebebasan membuat proyek Bahasa Jerman, proyek seperti apa yang ingin kamu buat?'},
+]},
+{key:'H', title:'Bahasa Asing', fields:[
+  {id:'q31', type:'textarea', num:31, prompt:'Apa yang terlintas di pikiranmu ketika mendengar kata "Bahasa Jerman"?'},
+  {id:'q32', type:'textarea', num:32, prompt:'Apa yang membuatmu tertarik atau tidak tertarik mempelajari Bahasa Jerman?'},
+  {id:'q33', type:'textarea', num:33, prompt:'Menurutmu, bagian tersulit mempelajari bahasa asing adalah... Mengapa?'},
+  {id:'q34', type:'textarea', num:34, prompt:'Jika satu tahun lagi kamu mampu berbicara Bahasa Jerman, hal pertama yang ingin kamu lakukan adalah...'},
+  {id:'q35', type:'checkbox', num:35, prompt:'Aktivitas apa yang paling kamu harapkan ada di pelajaran Bahasa Jerman?', options:['Lagu','Film','Game','Proyek','Percakapan','Budaya','Teknologi','AI','Presentasi'], reason:true},
+]},
+{key:'I', title:'Refleksi', fields:[
+  {id:'q36', type:'textarea', num:36, prompt:'Apa yang paling kamu takutkan ketika belajar di kelas?'},
+  {id:'q37', type:'textarea', num:37, prompt:'Apa yang biasanya membuatmu merasa percaya diri?'},
+  {id:'q38', type:'textarea', num:38, prompt:'Apa yang sebaiknya dilakukan guru ketika kamu mulai kesulitan belajar?'},
+  {id:'q39', type:'textarea', num:39, prompt:'Jika suatu saat motivasimu menurun, apa yang biasanya dapat membuatmu bangkit kembali?'},
+  {id:'q40', type:'multitext', n:3, num:40, prompt:'Tuliskan tiga hal yang ingin kamu capai pada akhir pembelajaran Bahasa Jerman tahun ini.', ph:['Tujuan 1','Tujuan 2','Tujuan 3']},
+]},
+];
+
+const OPEN_TEXT_QUESTIONS = []; // built at init: {sectionKey, fieldId, prompt}
+SECTIONS.forEach(s=>s.fields.forEach(f=>{
+  if(f.type==='textarea') OPEN_TEXT_QUESTIONS.push({sec:s.key, id:f.id, prompt:f.prompt});
+}));
+
+/* ============================================================
+   STORAGE HELPERS
+   ============================================================ */
+const STORE_KEY = 'responses';
+
+// ── KONEKSI KE GOOGLE SHEET (opsional, untuk hosting mandiri) ──────────────
+// Isi dengan URL Web App Apps Script kamu (diakhiri /exec) supaya data
+// tersimpan bersama di Google Sheet dan bisa diakses dari perangkat mana pun.
+// Kosongkan ('') kalau aplikasi ini dijalankan di dalam Claude.
+const SHEET_WEBAPP_URL = ''; // contoh: 'https://script.google.com/macros/s/AKfycb.../exec'
+
+const HAS_CLOUD_STORAGE = typeof window.storage !== 'undefined';
+const STORAGE_MODE = SHEET_WEBAPP_URL ? 'sheet' : (HAS_CLOUD_STORAGE ? 'cloud' : 'local');
+
+async function fetchAllResponses(){
+  try{
+    if(STORAGE_MODE==='sheet'){
+      const res = await fetch(SHEET_WEBAPP_URL, {cache:'no-store'});
+      const rows = await res.json();
+      return (rows||[]).filter(r=>r && r.id).map(r=>({
+        id: r.id, submittedAt: r.submittedAt,
+        answers: JSON.parse(r.answersJson || '{}')
+      }));
+    }
+    if(STORAGE_MODE==='cloud'){
+      const res = await window.storage.get(STORE_KEY, true);
+      return res && res.value ? JSON.parse(res.value) : [];
+    }
+    const raw = localStorage.getItem(STORE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  }catch(e){ return []; }
+}
+
+async function appendResponse(record){
+  try{
+    if(STORAGE_MODE==='sheet'){
+      await fetch(SHEET_WEBAPP_URL, {
+        method:'POST',
+        headers:{'Content-Type':'text/plain;charset=utf-8'}, // hindari CORS preflight
+        body: JSON.stringify({action:'save', record})
+      });
+      return true;
+    }
+    const list = await fetchAllResponses();
+    list.push(record);
+    if(STORAGE_MODE==='cloud'){
+      const res = await window.storage.set(STORE_KEY, JSON.stringify(list), true);
+      return !!res;
+    }
+    localStorage.setItem(STORE_KEY, JSON.stringify(list));
+    return true;
+  }catch(e){ return false; }
+}
+
+async function resetAllResponses(){
+  try{
+    if(STORAGE_MODE==='sheet'){
+      await fetch(SHEET_WEBAPP_URL, {
+        method:'POST',
+        headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body: JSON.stringify({action:'reset'})
+      });
+      return true;
+    }
+    if(STORAGE_MODE==='cloud'){
+      const res = await window.storage.set(STORE_KEY, JSON.stringify([]), true);
+      return !!res;
+    }
+    localStorage.setItem(STORE_KEY, JSON.stringify([]));
+    return true;
+  }catch(e){ return false; }
+}
+
+/* ============================================================
+   APP STATE
+   ============================================================ */
+let state = {
+  mode: 'form', // 'form' | 'dash' | 'done'
+  answers: {},
+  rankOrder: [...RANK_ITEMS],
+  activeSection: 'A',
+};
+LIKERT_ITEMS.forEach((_,i)=> state.answers['e'+i] = null);
+
+const app = document.getElementById('app');
+
+/* ============================================================
+   RENDER: TOP BAR
+   ============================================================ */
+function renderTopbar(){
+  return `
+  <div class="topbar">
+    <div class="brand">
+      <div class="stamp">DJ</div>
+      <div class="brand-text">
+        <p class="k1">Fragebogen · Diagnostik Awal</p>
+        <h1>Bahasa Jerman</h1>
+      </div>
+    </div>
+    <div class="modebar">
+      <button data-modebtn="form" class="${state.mode!=='dash'?'active':''}">Isi Asesmen</button>
+      <button data-modebtn="dash" class="${state.mode==='dash'?'active':''}">Dashboard Guru</button>
+    </div>
+  </div>`;
+}
+
+/* ============================================================
+   RENDER: FORM
+   ============================================================ */
+function fieldValue(id, sub){
+  const key = sub!==undefined ? id+'_'+sub : id;
+  return state.answers[key] ?? '';
+}
+function setAnswer(id, val){ state.answers[id] = val; }
+
+function renderField(f){
+  const numBadge = f.noNum ? '' : `<span class="q-num">${f.num}</span>`;
+  let body = '';
+
+  if(f.type==='multitext'){
+    body = `<div class="multitext">${Array.from({length:f.n}).map((_,i)=>`
+      <input type="text" data-field="${f.id}" data-sub="${i}" placeholder="${f.ph[i]}" value="${(state.answers[f.id]||[])[i]||''}">
+    `).join('')}</div>`;
+  } else if(f.type==='textarea'){
+    body = `<textarea data-field="${f.id}" placeholder="Tulis jawabanmu di sini...">${state.answers[f.id]||''}</textarea>`;
+  } else if(f.type==='radio'){
+    body = `<div class="opt-list">${f.options.map(o=>`
+      <label><input type="radio" name="${f.id}" value="${o}" data-field="${f.id}" ${state.answers[f.id]===o?'checked':''}> ${o}</label>
+    `).join('')}</div>
+    ${f.reason? `<div class="reason-field"><label class="rlabel">Mengapa?</label><textarea data-field="${f.id}_alasan" placeholder="Ceritakan alasanmu...">${state.answers[f.id+'_alasan']||''}</textarea></div>`:''}`;
+  } else if(f.type==='checkbox'){
+    const arr = state.answers[f.id]||[];
+    body = `<div class="opt-list">${f.options.map(o=>`
+      <label><input type="checkbox" value="${o}" data-field="${f.id}" ${arr.includes(o)?'checked':''}> ${o}</label>
+    `).join('')}</div>
+    ${f.reason? `<div class="reason-field"><label class="rlabel">Mengapa?</label><textarea data-field="${f.id}_alasan" placeholder="Ceritakan alasanmu...">${state.answers[f.id+'_alasan']||''}</textarea></div>`:''}`;
+  } else if(f.type==='likert'){
+    body = renderLikert();
+  } else if(f.type==='ranking'){
+    body = renderRanking();
+  }
+
+  return `<div class="q">
+    <div class="q-prompt">${numBadge}<span>${f.prompt||''}</span></div>
+    <div class="q-body">${body}</div>
+  </div>`;
+}
+
+function renderLikert(){
+  const rows = LIKERT_ITEMS.map((item,i)=>`
+    <tr>
+      <td class="stmt">${item.t}</td>
+      ${[1,2,3,4,5].map(v=>`<td class="pick"><input type="radio" name="e${i}" value="${v}" data-field="e${i}" ${state.answers['e'+i]===v?'checked':''}></td>`).join('')}
+    </tr>`).join('');
+  return `
+  <table class="likert-table">
+    <thead><tr><th style="text-align:left;">Pernyataan</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>
+  <div class="likert-legend"><span>1 = Sangat tidak sesuai</span><span>5 = Sangat sesuai</span></div>`;
+}
+
+function renderRanking(){
+  return `
+  <div class="rank-list" id="rankList">
+    ${state.rankOrder.map((item,i)=>`
+      <div class="rank-row" draggable="true" data-item="${item}">
+        <span class="grip">⠿⠿</span>
+        <span class="rnum">${i+1}</span>
+        <span>${item}</span>
+      </div>`).join('')}
+  </div>
+  <p class="rank-hint">Urutan ke-1 = paling kamu sukai. Seret kartu untuk mengubah urutan.</p>`;
+}
+
+function renderSection(sKey){
+  const s = SECTIONS.find(x=>x.key===sKey);
+  return `
+  <div class="card section-card">
+    <div class="section-head">
+      <div class="glyph">${s.key}</div>
+      <div class="txt">
+        <p class="eyebrow">Bagian ${s.key}</p>
+        <h2>${s.title}</h2>
+      </div>
+    </div>
+    ${s.fields.map(renderField).join('')}
+  </div>`;
+}
+
+function countAnswered(){
+  let total=0, filled=0;
+  SECTIONS.forEach(s=>s.fields.forEach(f=>{
+    if(f.type==='multitext'){
+      total += f.n;
+      const arr = state.answers[f.id]||[];
+      filled += arr.filter(v=>v && v.trim()).length;
+    } else if(f.type==='textarea'){
+      total += 1;
+      if((state.answers[f.id]||'').trim()) filled+=1;
+    } else if(f.type==='radio'){
+      total += 1;
+      if(state.answers[f.id]) filled+=1;
+    } else if(f.type==='checkbox'){
+      total += 1;
+      if((state.answers[f.id]||[]).length) filled+=1;
+    } else if(f.type==='likert'){
+      total += LIKERT_ITEMS.length;
+      filled += LIKERT_ITEMS.filter((_,i)=>state.answers['e'+i]!=null).length;
+    } else if(f.type==='ranking'){
+      total += 1; filled += 1; // always has a default order
+    }
+  }));
+  total += 3; // nama, kelas, tanggal
+  filled += (state.answers.nama? 1:0) + (state.answers.kelas?1:0) + (state.answers.tanggal?1:0);
+  return {total, filled};
+}
+
+function renderFormView(){
+  const {total, filled} = countAnswered();
+  const pct = Math.round((filled/total)*100);
+  return `
+  <div class="wrap">
+    <div class="card section-card" style="margin-bottom:20px;">
+      <div class="section-head" style="border-bottom:none; margin-bottom:14px; padding-bottom:0;">
+        <div class="txt">
+          <p class="eyebrow">Identitas</p>
+          <h2>Sebelum mulai...</h2>
+        </div>
+      </div>
+      <p style="font-size:13px; color:var(--muted); margin-top:-8px; line-height:1.6;">
+        Tidak ada jawaban benar maupun salah. Jawablah sesuai keadaanmu yang sebenarnya — jawabanmu tidak memengaruhi nilai. Gurumu menggunakan jawaban ini untuk menyesuaikan cara mengajar selama satu tahun ke depan.
+      </p>
+      <div class="meta-grid">
+        <div><label>Nama</label><input type="text" data-field="nama" value="${state.answers.nama||''}" placeholder="Nama lengkap"></div>
+        <div><label>Kelas</label><input type="text" data-field="kelas" value="${state.answers.kelas||''}" placeholder="Contoh: X-2"></div>
+        <div><label>Tanggal</label><input type="text" data-field="tanggal" value="${state.answers.tanggal||''}" placeholder="dd/mm/yyyy"></div>
+      </div>
+    </div>
+
+    <div class="layout">
+      <div class="tabs-rail">
+        ${SECTIONS.map(s=>`
+          <button class="tab-item ${state.activeSection===s.key?'on':''}" data-jump="${s.key}">
+            <span class="let">${s.key}</span><span>${s.title}</span>
+          </button>`).join('')}
+      </div>
+      <div id="sectionHolder">
+        ${renderSection(state.activeSection)}
+        <div style="display:flex; justify-content:space-between; margin-top:18px;">
+          ${renderPrevNext()}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="progressbar">
+    <span class="lbl">${filled}/${total} terisi</span>
+    <div class="track"><div class="fill" style="width:${pct}%"></div></div>
+    <span class="lbl">${pct}%</span>
+    ${state.activeSection==='I' ? `<button class="btn" id="submitBtn">Kirim Jawaban</button>` : ''}
+  </div>
+  `;
+}
+
+function renderPrevNext(){
+  const idx = SECTIONS.findIndex(s=>s.key===state.activeSection);
+  const prev = idx>0 ? SECTIONS[idx-1] : null;
+  const next = idx<SECTIONS.length-1 ? SECTIONS[idx+1] : null;
+  return `
+    <div>${prev?`<button class="btn secondary" style="color:var(--ink); border-color:var(--line);" data-jump="${prev.key}">← Bagian ${prev.key}</button>`:'<span></span>'}</div>
+    <div>${next?`<button class="btn" data-jump="${next.key}">Bagian ${next.key} →</button>`:''}</div>
+  `;
+}
+
+function renderDoneView(){
+  return `
+  <div class="wrap">
+    <div class="done-screen">
+      <div class="stamp-big">✓</div>
+      <h2>Terima kasih!</h2>
+      <p>Jawabanmu sudah tersimpan. Gurumu akan menggunakan hasil ini untuk menyesuaikan cara belajar Bahasa Jerman tahun ini supaya lebih cocok untukmu.</p>
+      <div style="margin-top:24px;">
+        <button class="btn secondary" style="color:#EFE9DA; border-color:rgba(255,255,255,0.3);" id="fillAgain">Isi jawaban lain</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ============================================================
+   ANALYSIS HELPERS
+   ============================================================ */
+function tally(list, id, options){
+  const counts = {}; options.forEach(o=>counts[o]=0);
+  list.forEach(r=>{
+    const v = r.answers[id];
+    if(Array.isArray(v)) v.forEach(x=>{ if(counts[x]!=null) counts[x]++; });
+    else if(v && counts[v]!=null) counts[v]++;
+  });
+  return counts;
+}
+function barChart(counts, total, colorFn){
+  const entries = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+  const max = Math.max(1, ...entries.map(e=>e[1]));
+  return entries.map(([label,c],i)=>{
+    const pct = total? Math.round((c/total)*100):0;
+    const w = Math.round((c/max)*100);
+    return `<div class="bar-row">
+      <div class="lab" title="${label}">${label}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${w}%; background:${colorFn?colorFn(i):'var(--teal)'}"></div></div>
+      <div class="cnt">${c} · ${pct}%</div>
+    </div>`;
+  }).join('');
+}
+const PALETTE = ['#9C3D34','#C79A3D','#2B5D5A','#6E5B8C','#3E6B4F','#B8763F','#5A6B8C','#8C5A6B','#4A7A6F'];
+function colorCycle(i){ return PALETTE[i % PALETTE.length]; }
+
+function motivationScore(r){
+  let sum=0, n=0;
+  LIKERT_ITEMS.forEach((item,i)=>{
+    const v = r.answers['e'+i];
+    if(v!=null){ sum += item.rev ? (6-v) : v; n++; }
+  });
+  return n? sum/n : null;
+}
+
+function rankAverages(list){
+  const sums = {}; RANK_ITEMS.forEach(i=>sums[i]=[]);
+  list.forEach(r=>{
+    const order = r.answers.q21 || RANK_ITEMS;
+    order.forEach((item,idx)=>{ if(sums[item]) sums[item].push(idx+1); });
+  });
+  const avg = {};
+  Object.entries(sums).forEach(([k,arr])=>{ avg[k] = arr.length? arr.reduce((a,b)=>a+b,0)/arr.length : null; });
+  return avg;
+}
+
+/* ============================================================
+   RENDER: DASHBOARD
+   ============================================================ */
+let dashData = [];
+let dashDetailId = null;
+let openQTab = OPEN_TEXT_QUESTIONS[0]?.id;
+
+function renderDashboard(){
+  if(!dashData.length){
+    return `<div class="wrap"><div class="card section-card"><div class="empty-state">
+      <div class="big">Belum ada data</div>
+      <p>Hasil akan muncul di sini setelah siswa mengisi asesmen. Data ini tersimpan bersama (shared) — siapa pun yang membuka aplikasi ini dapat melihat hasil agregat pada tab Dashboard Guru.</p>
+    </div></div></div>`;
+  }
+
+  const n = dashData.length;
+  const scores = dashData.map(motivationScore).filter(v=>v!=null);
+  const avgMotiv = scores.length? (scores.reduce((a,b)=>a+b,0)/scores.length) : null;
+
+  const q7counts = tally(dashData, 'q7', ['Mencoba sendiri','Mencari video','Mencari di internet','Bertanya guru','Bertanya teman','Menunggu dijelaskan']);
+  const q14counts = tally(dashData, 'q14', ['Sesuatu yang harus dihindari','Bagian dari proses belajar','Tanda saya kurang pintar','Tergantung situasinya']);
+  const q23counts = tally(dashData, 'q23', ['Sendiri','Berpasangan','Kelompok kecil','Kelompok besar']);
+  const q35counts = tally(dashData, 'q35', ['Lagu','Film','Game','Proyek','Percakapan','Budaya','Teknologi','AI','Presentasi']);
+  const q6counts = tally(dashData, 'q6', ['Masih fokus','Mulai kehilangan fokus','Baru mulai memahami','Menunggu contoh','Menunggu diskusi']);
+
+  const rAvg = rankAverages(dashData);
+  const rankSorted = Object.entries(rAvg).filter(([,v])=>v!=null).sort((a,b)=>a[1]-b[1]);
+  const rankMaxPref = 9; // 9 - avgRank => preference score, max theoretical ~8
+  const rankBars = rankSorted.map(([label,avg],i)=>{
+    const pref = rankMaxPref - avg;
+    const w = Math.round((pref/8)*100);
+    return `<div class="bar-row">
+      <div class="lab" title="${label}">${label}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${w}%; background:${colorCycle(i)}"></div></div>
+      <div class="cnt">avg ${avg.toFixed(1)}</div>
+    </div>`;
+  }).join('');
+
+  return `
+  <div class="wrap">
+    <div class="dash-top">
+      <div class="info">${
+        STORAGE_MODE==='sheet' ? 'Mode Google Sheet: data tersimpan bersama dan tergabung dari perangkat mana pun yang mengisi.' :
+        STORAGE_MODE==='cloud' ? 'Data tersimpan bersama (shared) — dapat dilihat siapa pun yang membuka tautan aplikasi ini.' :
+        'Mode file lokal: data hanya tersimpan di browser/perangkat ini, tidak tergabung otomatis dari perangkat lain.'
+      }</div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn ghost" id="exportBtn">Ekspor CSV</button>
+        <button class="btn ghost" id="resetBtn" style="border-color:var(--muted); color:var(--muted);">Hapus semua data</button>
+      </div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card"><p class="k">Total Responden</p><p class="v">${n}</p></div>
+      <div class="stat-card"><p class="k">Skor Motivasi Rata-rata</p><p class="v">${avgMotiv? avgMotiv.toFixed(2):'–'} <small>/5</small></p></div>
+      <div class="stat-card"><p class="k">Aktivitas Paling Diminati</p><p class="v" style="font-size:16px;">${rankSorted[0]?rankSorted[0][0]:'–'}</p></div>
+      <div class="stat-card"><p class="k">Preferensi Belajar</p><p class="v" style="font-size:16px;">${Object.entries(q23counts).sort((a,b)=>b[1]-a[1])[0][0]}</p></div>
+    </div>
+
+    <div class="card section-card">
+      <div class="chart-block">
+        <p class="chart-title">Bagian E — Rata-rata skor motivasi</p>
+        <p class="chart-sub">Skala 1–5, item terbalik sudah disesuaikan (skor tinggi = motivasi lebih baik)</p>
+        ${renderMotivBars()}
+      </div>
+      <div class="chart-block">
+        <p class="chart-title">Bagian F.21 — Peringkat preferensi aktivitas belajar</p>
+        <p class="chart-sub">Diurutkan dari yang paling disukai kelas (rata-rata peringkat terbaik)</p>
+        ${rankBars}
+      </div>
+      <div class="chart-block">
+        <p class="chart-title">Bagian B.6 — Fokus di menit ke-20</p>
+        ${barChart(q6counts, n, colorCycle)}
+      </div>
+      <div class="chart-block">
+        <p class="chart-title">Bagian B.7 — Strategi menghadapi materi sulit</p>
+        ${barChart(q7counts, n, colorCycle)}
+      </div>
+      <div class="chart-block">
+        <p class="chart-title">Bagian C.14 — Pandangan terhadap kesalahan</p>
+        ${barChart(q14counts, n, colorCycle)}
+      </div>
+      <div class="chart-block">
+        <p class="chart-title">Bagian F.23 — Preferensi kelompok belajar</p>
+        ${barChart(q23counts, n, colorCycle)}
+      </div>
+      <div class="chart-block">
+        <p class="chart-title">Bagian H.35 — Aktivitas yang diharapkan di kelas Bahasa Jerman</p>
+        ${barChart(q35counts, n, colorCycle)}
+      </div>
+    </div>
+
+    <div class="card section-card">
+      <p class="chart-title" style="margin-bottom:12px;">Daftar Responden</p>
+      <div class="student-list">
+        ${dashData.map(r=>`
+          <div class="student-row">
+            <span class="nm">${escapeHtml(r.answers.nama||'(tanpa nama)')}</span>
+            <span class="cl">${escapeHtml(r.answers.kelas||'-')}</span>
+            <span class="cl mono">${new Date(r.submittedAt).toLocaleString('id-ID')}</span>
+            <button class="btn ghost" data-detail="${r.id}">Lihat jawaban</button>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="card section-card">
+      <p class="chart-title" style="margin-bottom:10px;">Jawaban Terbuka per Pertanyaan</p>
+      <div class="tab-strip">
+        ${OPEN_TEXT_QUESTIONS.map(q=>`<button data-opentab="${q.id}" class="${openQTab===q.id?'on':''}">${q.id.toUpperCase()}</button>`).join('')}
+      </div>
+      ${renderOpenAnswers()}
+    </div>
+  </div>
+  ${dashDetailId? renderDetailModal(): ''}
+  `;
+}
+
+function renderMotivBars(){
+  return LIKERT_ITEMS.map((item,i)=>{
+    const vals = dashData.map(r=>r.answers['e'+i]).filter(v=>v!=null).map(v=>item.rev?(6-v):v);
+    const avg = vals.length? vals.reduce((a,b)=>a+b,0)/vals.length : 0;
+    const w = Math.round((avg/5)*100);
+    return `<div class="bar-row">
+      <div class="lab" title="${item.t}">${item.t.length>34? item.t.slice(0,34)+'…':item.t}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${w}%; background:var(--gold)"></div></div>
+      <div class="cnt">${avg.toFixed(1)}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderOpenAnswers(){
+  const q = OPEN_TEXT_QUESTIONS.find(x=>x.id===openQTab);
+  if(!q) return '';
+  const rows = dashData
+    .filter(r=> (r.answers[q.id]||'').trim())
+    .map(r=>`<div class="open-answer">
+      <div class="who">${escapeHtml(r.answers.nama||'Anonim')} · ${escapeHtml(r.answers.kelas||'-')}</div>
+      <div class="txt">${escapeHtml(r.answers[q.id])}</div>
+    </div>`).join('');
+  return `<p class="chart-sub" style="margin-bottom:10px;">${escapeHtml(q.prompt)}</p>
+    <div style="max-height:340px; overflow-y:auto;">${rows || '<p class="chart-sub">Belum ada jawaban untuk pertanyaan ini.</p>'}</div>`;
+}
+
+function renderDetailModal(){
+  const r = dashData.find(x=>x.id===dashDetailId);
+  if(!r) return '';
+  const groups = SECTIONS.map(s=>{
+    const rows = s.fields.map(f=>{
+      if(f.type==='likert') return '';
+      let val = r.answers[f.id];
+      if(f.type==='multitext') val = (val||[]).filter(Boolean).join(', ');
+      if(f.type==='checkbox') val = (val||[]).join(', ');
+      if(f.type==='ranking') val = (val||RANK_ITEMS).join(' → ');
+      if(!val) return '';
+      let extra = '';
+      if(f.reason && r.answers[f.id+'_alasan']) extra = `<div style="margin-top:2px; color:var(--muted); font-size:12px;">Alasan: ${escapeHtml(r.answers[f.id+'_alasan'])}</div>`;
+      return `<div class="row"><b>${f.prompt||f.id}</b>${escapeHtml(String(val))}${extra}</div>`;
+    }).join('');
+    let likertRow = '';
+    if(s.key==='E'){
+      likertRow = LIKERT_ITEMS.map((item,i)=>{
+        const v = r.answers['e'+i];
+        return v!=null? `<div class="row"><b>${item.t}</b>${v} / 5</div>`:'';
+      }).join('');
+    }
+    if(!rows && !likertRow) return '';
+    return `<div class="grp"><h4>Bagian ${s.key} — ${s.title}</h4>${rows}${likertRow}</div>`;
+  }).join('');
+
+  return `<div class="modal-bg" id="modalBg">
+    <div class="modal">
+      <button class="x" id="modalClose">×</button>
+      <h3>${escapeHtml(r.answers.nama||'Anonim')} <span style="color:var(--muted); font-weight:400; font-size:14px;">· ${escapeHtml(r.answers.kelas||'-')}</span></h3>
+      ${groups}
+    </div>
+  </div>`;
+}
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+/* ============================================================
+   MAIN RENDER
+   ============================================================ */
+function render(){
+  let body = '';
+  if(state.mode==='dash') body = renderDashboard();
+  else if(state.mode==='done') body = renderDoneView();
+  else body = renderFormView();
+  app.innerHTML = renderTopbar() + body;
+  attachEvents();
+}
+
+function showToast(msg){
+  const el = document.createElement('div');
+  el.className='toast'; el.textContent=msg;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(), 2600);
+}
+
+/* ============================================================
+   EVENTS
+   ============================================================ */
+function attachEvents(){
+  document.querySelectorAll('[data-modebtn]').forEach(b=>{
+    b.addEventListener('click', async ()=>{
+      state.mode = b.dataset.modebtn==='dash' ? 'dash' : 'form';
+      if(state.mode==='dash'){ dashData = await fetchAllResponses(); }
+      render();
+    });
+  });
+
+  document.querySelectorAll('[data-jump]').forEach(b=>{
+    b.addEventListener('click', ()=>{ state.activeSection = b.dataset.jump; render(); window.scrollTo({top:0, behavior:'smooth'}); });
+  });
+
+  document.querySelectorAll('input[type=text][data-field], textarea[data-field]').forEach(el=>{
+    el.addEventListener('input', ()=>{
+      const id = el.dataset.field, sub = el.dataset.sub;
+      if(sub!==undefined){
+        const arr = state.answers[id] ? [...state.answers[id]] : [];
+        arr[+sub] = el.value;
+        state.answers[id] = arr;
+      } else {
+        state.answers[id] = el.value;
+      }
+      updateProgressOnly();
+    });
+  });
+
+  document.querySelectorAll('input[type=radio][data-field]').forEach(el=>{
+    el.addEventListener('change', ()=>{
+      state.answers[el.dataset.field] = isNaN(+el.value) ? el.value : +el.value;
+      updateProgressOnly();
+    });
+  });
+
+  document.querySelectorAll('input[type=checkbox][data-field]').forEach(el=>{
+    el.addEventListener('change', ()=>{
+      const id = el.dataset.field;
+      const arr = state.answers[id] ? [...state.answers[id]] : [];
+      if(el.checked){ if(!arr.includes(el.value)) arr.push(el.value); }
+      else { const idx = arr.indexOf(el.value); if(idx>-1) arr.splice(idx,1); }
+      state.answers[id] = arr;
+      updateProgressOnly();
+    });
+  });
+
+  attachDrag();
+
+  const submitBtn = document.getElementById('submitBtn');
+  if(submitBtn) submitBtn.addEventListener('click', submitForm);
+
+  const fillAgain = document.getElementById('fillAgain');
+  if(fillAgain) fillAgain.addEventListener('click', ()=>{
+    state.answers = {}; state.rankOrder=[...RANK_ITEMS]; state.activeSection='A';
+    LIKERT_ITEMS.forEach((_,i)=> state.answers['e'+i] = null);
+    state.mode='form'; render();
+  });
+
+  const exportBtn = document.getElementById('exportBtn');
+  if(exportBtn) exportBtn.addEventListener('click', exportCSV);
+
+  const resetBtn = document.getElementById('resetBtn');
+  if(resetBtn) resetBtn.addEventListener('click', async ()=>{
+    if(confirm('Hapus semua data hasil siswa? Tindakan ini tidak dapat dibatalkan.')){
+      await resetAllResponses();
+      dashData = [];
+      render();
+      showToast('Semua data telah dihapus.');
+    }
+  });
+
+  document.querySelectorAll('[data-detail]').forEach(b=>{
+    b.addEventListener('click', ()=>{ dashDetailId = b.dataset.detail; render(); });
+  });
+  const modalClose = document.getElementById('modalClose');
+  if(modalClose) modalClose.addEventListener('click', ()=>{ dashDetailId=null; render(); });
+  const modalBg = document.getElementById('modalBg');
+  if(modalBg) modalBg.addEventListener('click', (e)=>{ if(e.target.id==='modalBg'){ dashDetailId=null; render(); } });
+
+  document.querySelectorAll('[data-opentab]').forEach(b=>{
+    b.addEventListener('click', ()=>{ openQTab = b.dataset.opentab; render(); });
+  });
+}
+
+function updateProgressOnly(){
+  const {total, filled} = countAnswered();
+  const pct = Math.round((filled/total)*100);
+  const lbls = document.querySelectorAll('.progressbar .lbl');
+  if(lbls[0]) lbls[0].textContent = `${filled}/${total} terisi`;
+  if(lbls[1]) lbls[1].textContent = `${pct}%`;
+  const fill = document.querySelector('.progressbar .fill');
+  if(fill) fill.style.width = pct+'%';
+}
+
+function attachDrag(){
+  const list = document.getElementById('rankList');
+  if(!list) return;
+  let dragEl = null;
+  list.querySelectorAll('.rank-row').forEach(row=>{
+    row.addEventListener('dragstart', ()=>{ dragEl = row; row.classList.add('dragging'); });
+    row.addEventListener('dragend', ()=>{ row.classList.remove('dragging'); syncRankOrder(); });
+    row.addEventListener('dragover', (e)=>{
+      e.preventDefault();
+      const after = getDragAfter(list, e.clientY);
+      if(after==null) list.appendChild(dragEl);
+      else list.insertBefore(dragEl, after);
+    });
+  });
+}
+function getDragAfter(container, y){
+  const els = [...container.querySelectorAll('.rank-row:not(.dragging)')];
+  return els.reduce((closest, child)=>{
+    const box = child.getBoundingClientRect();
+    const offset = y - box.top - box.height/2;
+    if(offset<0 && offset>closest.offset) return {offset, element:child};
+    return closest;
+  }, {offset:-Infinity}).element;
+}
+function syncRankOrder(){
+  const list = document.getElementById('rankList');
+  if(!list) return;
+  const items = [...list.querySelectorAll('.rank-row')].map(r=>r.dataset.item);
+  state.rankOrder = items;
+  state.answers.q21 = items;
+  list.querySelectorAll('.rank-row .rnum').forEach((el,i)=> el.textContent = i+1);
+}
+
+async function submitForm(){
+  if(!state.answers.nama || !state.answers.nama.trim()){
+    showToast('Nama belum diisi.'); state.activeSection='A'; render();
+    document.querySelector('[data-field="nama"]')?.focus();
+    return;
+  }
+  state.answers.q21 = state.rankOrder;
+  const record = {
+    id: 'r_'+Date.now()+'_'+Math.random().toString(36).slice(2,8),
+    submittedAt: new Date().toISOString(),
+    answers: JSON.parse(JSON.stringify(state.answers)),
+  };
+  const ok = await appendResponse(record);
+  if(ok){ state.mode='done'; render(); }
+  else{ showToast('Gagal menyimpan. Periksa koneksi lalu coba lagi.'); }
+}
+
+function exportCSV(){
+  const headerSet = new Set(['id','submittedAt']);
+  dashData.forEach(r=> Object.keys(r.answers).forEach(k=>headerSet.add(k)));
+  const headers = [...headerSet];
+  const esc = v => `"${String(v??'').replace(/"/g,'""')}"`;
+  const rows = dashData.map(r=>{
+    return headers.map(h=>{
+      if(h==='id') return esc(r.id);
+      if(h==='submittedAt') return esc(r.submittedAt);
+      let v = r.answers[h];
+      if(Array.isArray(v)) v = v.join(' | ');
+      return esc(v);
+    }).join(',');
+  });
+  const csv = [headers.map(esc).join(','), ...rows].join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'asesmen-diagnostik-bahasa-jerman.csv';
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+render();
+</script>
+</body>
+</html>
